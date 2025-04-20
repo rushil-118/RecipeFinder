@@ -1,0 +1,38 @@
+name,cuisine,minutes,calories,vegetarian
+Margherita Pizza,Italian,25,780,true
+Spaghetti Carbonara,Italian,20,650,false
+Mushroom Risotto,Italian,40,520,true
+Lasagna,Italian,75,720,false
+Caprese Salad,Italian,10,310,true
+Minestrone Soup,Italian,45,280,true
+Chicken Parmigiana,Italian,50,690,false
+Palak Paneer,Indian,35,430,true
+Butter Chicken,Indian,45,590,false
+Chana Masala,Indian,30,380,true
+Lamb Rogan Josh,Indian,90,640,false
+Vegetable Biryani,Indian,60,510,true
+Masala Dosa,Indian,40,350,true
+Tandoori Chicken,Indian,55,420,false
+Chicken Tacos,Mexican,25,480,false
+Bean Burrito,Mexican,20,540,true
+Guacamole and Chips,Mexican,10,390,true
+Beef Enchiladas,Mexican,60,710,false
+Veggie Quesadilla,Mexican,15,460,true
+Chilaquiles,Mexican,25,430,true
+Salmon Sushi Rolls,Japanese,45,320,false
+Vegetable Tempura,Japanese,30,410,true
+Miso Soup,Japanese,10,90,true
+Chicken Katsu Curry,Japanese,50,760,false
+Ramen,Japanese,40,550,false
+Edamame,Japanese,5,120,true
+Pad Thai,Thai,25,600,false
+Green Curry,Thai,35,490,false
+Tom Yum Soup,Thai,25,210,false
+Mango Sticky Rice,Thai,40,430,true
+Vegetable Spring Rolls,Thai,30,260,true
+Coq au Vin,French,120,610,false
+French Onion Soup,French,70,370,true
+Ratatouille,French,60,240,true
+Quiche Lorraine,French,65,580,false
+Crepes,French,20,290,true
+Croque Monsieur,French,20,630,false

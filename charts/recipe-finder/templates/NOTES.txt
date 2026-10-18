@@ -1,0 +1,4 @@
+Deployed {{ include "recipe-finder.image" . }}
+
+  kubectl port-forward svc/{{ include "recipe-finder.name" . }} 8080:{{ .Values.service.port }}
+  curl localhost:8080/version

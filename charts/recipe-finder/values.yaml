@@ -1,0 +1,36 @@
+image:
+  repository: recipe-finder
+  # No default on purpose: every deploy names an immutable tag (the git commit), so the
+  # running version is always traceable. The chart refuses to render without it.
+  tag: ""
+  pullPolicy: IfNotPresent
+
+replicaCount: 2
+
+features:
+  nutrition: true
+
+
+failHealth: false
+
+service:
+  port: 80
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 96Mi
+  limits:
+    cpu: 500m
+    memory: 192Mi
+
+podDisruptionBudget:
+  minAvailable: 1
+
+networkPolicy:
+  enabled: false
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8080"
+  prometheus.io/path: "/metrics"

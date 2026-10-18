@@ -1,0 +1,14 @@
+.venv/
+.git/
+.github/
+tests/
+charts/
+docs/
+scripts/
+monitoring/
+*.md
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.coverage
+requirements-dev.txt

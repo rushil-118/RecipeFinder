@@ -1,0 +1,26 @@
+name: cd
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: helm/kind-action@v1
+        with:
+          cluster_name: recipe-finder
+      - name: Build, deploy and smoke test
+        run: bash scripts/deploy.sh
+      - name: Bad release demo (app keeps serving, then rolls back)
+        run: bash scripts/demo-rollback.sh
+      - name: Diagnostics on failure
+        if: failure()
+        run: |
+          kubectl -n recipe-finder get pods -o wide || true
+          kubectl -n recipe-finder logs -l app.kubernetes.io/name=recipe-finder --tail=100 || true

@@ -1,0 +1,52 @@
+groups:
+  - name: recipe-finder-sli
+    rules:
+      - record: recipe_finder:success_ratio:rate5m
+        expr: |
+          1 - (
+            sum(rate(http_requests_total{route=~"/recipes/.*",status=~"5.."}[5m]))
+            /
+            sum(rate(http_requests_total{route=~"/recipes/.*"}[5m]))
+          )
+      - record: recipe_finder:latency_p95:5m
+        expr: |
+          histogram_quantile(0.95,
+            sum by (le) (rate(http_request_duration_seconds_bucket{route=~"/recipes/.*"}[5m])))
+
+  - name: recipe-finder-alerts
+    rules:
+      - alert: RecipeFinderHighErrorRate
+        expr: (1 - recipe_finder:success_ratio:rate5m) > 0.05
+        for: 5m
+        labels: {severity: page}
+        annotations:
+          summary: ">5% of requests failing with 5xx (SLO: 99% success)"
+          action: "Recent deploy? `helm history recipe-finder`, then `helm rollback recipe-finder`. Otherwise read the JSON logs for status 5xx."
+      - alert: RecipeFinderHighLatency
+        expr: recipe_finder:latency_p95:5m > 0.1
+        for: 10m
+        labels: {severity: ticket}
+        annotations:
+          summary: "p95 latency above 100ms (SLO: p95 < 100ms)"
+          action: "Check CPU throttling against the container limit; raise resources.limits.cpu or replicaCount."
+      - alert: RecipeFinderPodNotScraped
+        expr: up{job=~".*recipe-finder.*"} == 0
+        for: 2m
+        labels: {severity: page}
+        annotations:
+          summary: "A Recipe Finder pod is not being scraped"
+          action: "kubectl get pods; kubectl describe pod. Look for probe failures and restarts."
+      - alert: RecipeFinderCatalogEmpty
+        expr: recipes_loaded == 0
+        for: 1m
+        labels: {severity: page}
+        annotations:
+          summary: "A pod has an empty catalog (it is also unready)"
+          action: "Check the data file in the image and the pod logs for load errors."
+      - alert: RecipeFinderMixedVersions
+        expr: count(count by (commit) (build_info)) > 1
+        for: 15m
+        labels: {severity: ticket}
+        annotations:
+          summary: "More than one version has been running for 15 minutes"
+          action: "A rollout is stuck: kubectl rollout status deployment/recipe-finder; consider helm rollback."
